@@ -1,36 +1,75 @@
 import './App.css';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Axios from 'axios';
+import axios from 'axios';
 import SingleRecipe from './singleRecipe';
 import PostRecipe from './postRecipe';
+import SearchBar from './searchBar';
 
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      recipes: []
+      recipes: [],
+      searchText: '' 
     }
     this.loading = <h3>Just waiting for our recipes to load!</h3>
+    this.handleCreatePost = this.handleCreatePost.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+ 
+
+  handleDelete(id, e) {
+    axios
+      .delete(`http://localhost:5002/recipes/${id}`)
+      .then((res) => {
+        console.log(res);
+        let recipes = [...this.state.recipes];
+        recipes = recipes.filter((item) => item._id !== id);
+        console.log(this.state.recipes);
+        console.log(recipes);
+        this.setState({recipes});
+      })
+      .catch((err)=>{
+        console.log(err);
+        return err
+      })
   }
 
-  post(event) {
-    const newTitle = document.getElementById("title").value;
-    const newPreptime = document.getElementById("prep_time").value;
-    const newIng = document.getElementById("ingredients").value;
-    const newInst = document.getElementById("instructions").value;
-    const newImage = document.getElementById("image").value;
-    const newStory = document.getElementById("story").value;
+  handleCreatePost(data) {
+    axios
+      .post("http://localhost:5002/recipes", data)
+      .then((res) => { 
+        console.log(res);
+        data._id = res.data._id;
+        let recipes = [...this.state.recipes];
+        recipes.push(data);
+        this.setState({recipes});
+        console.log(this.state.recipes)
+      })
+      .catch(err => console.log(err));
+    
+  };
+
+  handleUpdateState(data) {
+    this.setState({data});
+    console.log(this.state)
   }
+
+  handleSearch(search) {
+    this.setState({searchText: search});
+    console.log(this.state.searchText);
+  };  
 
   componentDidMount() {
-    fetch('http://localhost:5002/recipes')
+    fetch(`http://localhost:5002/recipes`)
     .then((res)=> res.json())
     .then((data)=>{
       let recipeList = data;
-      console.log(recipeList);
-      this.setState({recipes: recipeList})
+      this.setState({recipes: recipeList});
+      console.log(this.state.recipes);
     })
     .catch((err)=>{
       console.log(err);
@@ -38,7 +77,9 @@ class App extends React.Component {
     })
   }
 
-  render() { 
+  render() {
+    const searchText = this.state.searchText;
+
     return (
     <Router>
       <div className='container px-2'>
@@ -48,22 +89,29 @@ class App extends React.Component {
           of what recipes you want on any given day. Update recipes, delete recipes, post new recipes, the choice is yours!
         </p>
         <br/>
+        <SearchBar handleSearch={this.handleSearch} className="" />
       </div>
       <Switch>
         <Route exact path='/'>
           <div className='grid-list'>
             <ul className='list-group'>
-              { this.state.recipes.map((recipe)=>
-                <li key={recipe.id}><Link to={'/recipes/' + recipe._id}> {recipe.title} </Link></li>
-                // <li key={recipe.id}> {recipe.prep_time} </li>
-                // <li key={recipe.id}> {recipe.ingredients} </li>
-                // <li key={recipe.id}> {recipe.isntructions} </li>
-                // <li key={recipe.id}> {recipe.story} </li>
-              )};
+              { this.state.recipes.map((recipe)=> {
+                if (recipe.title.indexOf(searchText) !== -1) {
+                  return <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title} </Link>
+                  <img src={recipe.image} width="100px" height="100px" alt="" className="m-2" /><button className='btn-danger m-3' onClick={(e) => this.handleDelete(recipe._id, e)}>Delete</button></li>
+                } 
+                if (recipe.title.indexOf(searchText) == '') {
+                <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title} </Link>
+                <img src={recipe.image} width="100px" height="100px" alt="" className="m-2" /><button className='btn-danger m-3' onClick={(e) => this.handleDelete(recipe._id, e)}>Delete</button></li>}
+                if (recipe.title.indexOf(searchText) === -1) {
+                  return 'No recipe found';
+                }})
+              };
             </ul>
           </div>
           <div>
-            <Link to={'/recipes/post'} component={PostRecipe}> Click here to post a recipe to the database </Link>
+            {/* <Link to={'/recipes/post'} component={PostRecipe} post={this.post(data)}> Click here to post a recipe to the database </Link> */}
+            <PostRecipe recipes={this.state.recipes} handleCreatePost={this.handleCreatePost} />
           </div>
         </Route>
         <Route path='/recipes/:_id' component={SingleRecipe} />        

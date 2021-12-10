@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const cors = require('cors');
 const Recipe = require('../models/recipes');
 
 
@@ -34,11 +34,12 @@ router.put('/:id', async (req, res)=>{
 
   const updatedRecipe = await Recipe.updateOne(
     {_id: req.params.id}, {$set: req.body});
+    console.log(req.body);
   res.json(updatedRecipe);
 })
 
 router.delete('/:id', async (req,res)=>{
-  const result = Recipe.findByIdAndDelete({_id: req.params.id});
+  const result = await Recipe.findByIdAndDelete({_id: req.params.id});
   res.json(result);
 })
 

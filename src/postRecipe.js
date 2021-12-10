@@ -1,44 +1,61 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 
 class PostRecipe extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      newRecipe = {
         title: '',
         prep_time: '',
         ingredients: '',
         instructions: '',
         image: '',
         story: ''
-      }
     }
-  post(event) {
-    const newTitle = document.getElementById("title").value;
-    const newPreptime = document.getElementById("prep_time").value;
-    const newIng = document.getElementById("ingredients").value;
-    const newInst = document.getElementById("instructions").value;
-    const newImage = document.getElementById("image").value;
-    const newStory = document.getElementById("story").value;
-    console.log('adding a recipe to the database')
-    this.props.post()
-  };
+    this.handlePost = this.handlePost.bind(this);
+  }
 
-  this.setState({title: newTitle, prep_time: newPreptime, ingredients: newIng, instructions: newInst, image: newImage, story: newStory})
+  // use e.target to access the target element of the event - can then traverse dom
+  //to specifically target any element and get its value through .value
+  handlePost = e => {
+    e.preventDefault();
+    var data = {
+      title: e.target.elements.title.value,
+      prep_time: e.target.elements.prep_time.value,
+      ingredients: e.target.elements.ingredients.value,
+      instructions: e.target.elements.instructions.value,
+      image: e.target.elements.image.value,
+      story: e.target.elements.story.value
+    }
+    this.props.handleCreatePost(data);
+    e.target.elements.title.value = '';
+    e.target.elements.prep_time.value = '';
+    e.target.elements.ingredients.value = '';
+    e.target.elements.instructions.value = '';
+    e.target.elements.image.value = '';
+    e.target.elements.story.value = '';
+  };
 
   render() { 
     return (
     <div>
       <h1 className="text-center"> Post a new recipe to be added to your collection! </h1>
-      <form className="py-2">
-        <input type="text" name="title" placeholder="Title"></input>
-        <input type="text" name="prep_time" placeholder="Prep Time"></input>
-        <input type="text" name="ingredients" placeholder="Ingredients"></input>
-        <input type="text" name="instructions" placeholder="Instructions"></input>
-        <input type="text" name="image" placeholder="Image URL"></input>
-        <input type="text" name="story" placeholder="Story"></input>
-        <button type="submit" className="btn btn-secondary" onClick={this.post}>Submit</button>
+      <form className="py-2 text-center" onSubmit={this.handlePost}>
+        <h3>Title </h3>
+        <input type="text" name="title" className="w-50" placeholder="Title"></input>
+        <h3> Prep Time </h3>
+        <input type="text" name="prep_time" className="w-50" placeholder="Prep Time"></input>
+        <h3> Ingredients </h3>
+        <input type="text" name="ingredients" className="w-50"placeholder="Ingredients"></input>
+        <h3>Instructions </h3>
+        <textarea type="text" name="instructions" className="w-50" placeholder="Instructions"></textarea>
+        <h3> Image URL (if any) </h3>
+        <input type="text" name="image" className="w-50" placeholder="Image URL"></input>
+        <h3> Story </h3>
+        <input type="text" name="story" className="w-50" placeholder="Story"></input>
+          <br></br>
+        <button type="submit" className="btn btn-secondary">Submit</button>
       </form>
     </div>
     );
