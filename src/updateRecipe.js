@@ -17,7 +17,7 @@ class UpdateRecipe extends React.Component {
       image: e.target.elements.image.value,
       story: e.target.elements.story.value
     };
-    this.props.handleUpdateState(data);
+    // this.props.handleUpdateState(data);
     axios
       .put('http://localhost:5002/recipes/' + this.props.match.params._id, data)
       .then((res) => {
