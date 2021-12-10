@@ -5,18 +5,19 @@ import axios from 'axios';
 import SingleRecipe from './singleRecipe';
 import PostRecipe from './postRecipe';
 import SearchBar from './searchBar';
+import RecipeList from './recipeList';
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      recipes: [],
-      searchText: '' 
-    }
+    // this.state = {
+    //   recipes: [],
+    //   searchText: '' 
+    // }
     this.loading = <h3>Just waiting for our recipes to load!</h3>
     this.handleCreatePost = this.handleCreatePost.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
+    // this.handleSearch = this.handleSearch.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
   }
  
@@ -58,27 +59,13 @@ class App extends React.Component {
     console.log(this.state)
   }
 
-  handleSearch(search) {
-    this.setState({searchText: search});
-    console.log(this.state.searchText);
-  };  
-
-  componentDidMount() {
-    fetch(`http://localhost:5002/recipes`)
-    .then((res)=> res.json())
-    .then((data)=>{
-      let recipeList = data;
-      this.setState({recipes: recipeList});
-      console.log(this.state.recipes);
-    })
-    .catch((err)=>{
-      console.log(err);
-      return err;
-    })
-  }
+  // handleSearch(search) {
+  //   this.setState({searchText: search});
+  //   console.log(this.state.searchText);
+  // };  
 
   render() {
-    const searchText = this.state.searchText;
+    // const searchText = this.state.searchText;
 
     return (
     <Router>
@@ -89,29 +76,17 @@ class App extends React.Component {
           of what recipes you want on any given day. Update recipes, delete recipes, post new recipes, the choice is yours!
         </p>
         <br/>
-        <SearchBar handleSearch={this.handleSearch} className="" />
       </div>
       <Switch>
         <Route exact path='/'>
           <div className='grid-list'>
-            <ul className='list-group'>
-              { this.state.recipes.map((recipe)=> {
-                if (recipe.title.indexOf(searchText) !== -1) {
-                  return <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title} </Link>
-                  <img src={recipe.image} width="100px" height="100px" alt="" className="m-2" /><button className='btn-danger m-3' onClick={(e) => this.handleDelete(recipe._id, e)}>Delete</button></li>
-                } 
-                if (recipe.title.indexOf(searchText) == '') {
-                <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title} </Link>
-                <img src={recipe.image} width="100px" height="100px" alt="" className="m-2" /><button className='btn-danger m-3' onClick={(e) => this.handleDelete(recipe._id, e)}>Delete</button></li>}
-                if (recipe.title.indexOf(searchText) === -1) {
-                  return 'No recipe found';
-                }})
-              };
-            </ul>
+              <RecipeList handleDelete={this.handleDelete} />
+               {/* recipes={this.state.recipes} searchText={this.state.searchText} this line goes above in recipeList comp*/}
           </div>
           <div>
-            {/* <Link to={'/recipes/post'} component={PostRecipe} post={this.post(data)}> Click here to post a recipe to the database </Link> */}
-            <PostRecipe recipes={this.state.recipes} handleCreatePost={this.handleCreatePost} />
+            <Link to={'/recipes/post'} component={PostRecipe} post={this.post(data)}> Click here to post a recipe to the database </Link>
+            <PostRecipe handleCreatePost={this.handleCreatePost} />
+          
           </div>
         </Route>
         <Route path='/recipes/:_id' component={SingleRecipe} />        
