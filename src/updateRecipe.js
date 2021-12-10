@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 
 class UpdateRecipe extends React.Component {
@@ -8,7 +9,6 @@ class UpdateRecipe extends React.Component {
   }
 
   handleUpdate = e => {
-    console.log(this.state);
     e.preventDefault();
     var data = {
       prep_time: e.target.elements.prep_time.value,
@@ -17,32 +17,32 @@ class UpdateRecipe extends React.Component {
       image: e.target.elements.image.value,
       story: e.target.elements.story.value
     };
-    // this.props.handleUpdateState(data);
     axios
       .put('http://localhost:5002/recipes/' + this.props.match.params._id, data)
       .then((res) => {
-        console.log(res);
-        ;
+        console.log(data);
+        this.props.handleUpdateState(data);
     })
       .catch(err => console.log(err));
   };
 
   render() { 
-    console.log(this.state);
+    console.log(this.props.recipe);
     return (
     <div>
+      <Link to={'/recipes/' + this.props.match.params._id}>Back</Link>
       <h2>Update the details of your recipe {this.props.title} below</h2>
       <form className="py-2" onSubmit={this.handleUpdate}>
           <h3> Prep Time </h3>
-          <input type="text" name="prep_time" className="w-50" placeholder="Prep Time"></input>
+          <input type="text" name="prep_time" className="w-50" placeholder="Prep Time" defaultValue={this.props.recipe.prep_time} ></input>
           <h3> Ingredients </h3>
-          <input type="text" name="ingredients" className="w-50" placeholder="Ingredients"></input>
+          <input type="text" name="ingredients" className="w-50" placeholder="Ingredients" defaultValue={this.props.recipe.ingredients}></input>
           <h3>Instructions </h3>
-          <textarea type="text" name="instructions" className="w-50" placeholder="Instructions"></textarea>
+          <textarea type="text" name="instructions" className="w-50" placeholder="Instructions" defaultValue={this.props.recipe.instructions}></textarea>
           <h3> Image URL (if any) </h3>
-          <input type="text" name="image" className="w-50" placeholder="Image URL"></input>
+          <input type="text" name="image" className="w-50" placeholder="Image URL" defaultValue={this.props.recipe.image}></input>
           <h3> Story </h3>
-          <input type="text" name="story" className="w-50" placeholder="Story"></input>
+          <input type="text" name="story" className="w-50" placeholder="Story" defaultValue={this.props.recipe.story}></input>
             <br></br>
           <button type="submit" className="btn btn-secondary">Submit</button>
         </form>

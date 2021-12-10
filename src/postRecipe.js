@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -40,6 +41,7 @@ class PostRecipe extends React.Component {
   render() { 
     return (
     <div>
+      <Link to='/'>Back</Link>
       <h1 className="text-center"> Post a new recipe to be added to your collection! </h1>
       <form className="py-2 text-center" onSubmit={this.handlePost}>
         <h3>Title </h3>

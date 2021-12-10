@@ -7,19 +7,20 @@ class SingleRecipe extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      recipe: {
       title: '',
       prep_time: '',
       ingredients: '',
       instructions: '',
       image: '',
       story: ''
-    };
+    }
+  }
     this.handleUpdateState = this.handleUpdateState.bind(this);
   }  
 
   handleUpdateState(data) {
-    this.setState({data});
-    console.log(this.state)
+    this.setState({recipe: data});
   }
 
   componentDidMount() {
@@ -33,9 +34,9 @@ class SingleRecipe extends React.Component {
       let singleInst = data.instructions;
       let singleImg = data.image;
       let singleStory = data.story;
-      this.setState({title: singleTitle, prep_time: singlePreptime, ingredients: singleIng, 
-        instructions: singleInst, image: singleImg, story: singleStory})
-      console.log(this.state);
+      let newRecipe = {title: singleTitle, prep_time: singlePreptime, ingredients: singleIng, 
+        instructions: singleInst, image: singleImg, story: singleStory}
+      this.setState({recipe: newRecipe});
     })
   }
 
@@ -43,21 +44,21 @@ class SingleRecipe extends React.Component {
     return (
       <div className='p-3'>
         <Link to={'/'}>Back</Link>
-        <h2 className='mt-3'> {this.state.title} </h2>
+        <h2 className='mt-3'> {this.state.recipe.title} </h2>
             <br/>
-            <li> Prep Time: {this.state.prep_time} </li>
-            <li> Ingredients: {this.state.ingredients} </li>
-            <li> Instructions: {this.state.instructions} </li>
-            <li> Image: <img src={this.state.image} width="300px" height="300px" alt=''/> </li>
-            <li> Story: {this.state.story} </li>
+            <li> Prep Time: {this.state.recipe.prep_time} </li>
+            <li> Ingredients: {this.state.recipe.ingredients} </li>
+            <li> Instructions: {this.state.recipe.instructions} </li>
+            <li> Image: <img src={this.state.recipe.image} width="300px" height="300px" alt=''/> </li>
+            <li> Story: {this.state.recipe.story} </li>
         <br></br>
         
           <h3> Want to edit this recipe? </h3>
-            <Link to={{pathname: '/recipes/' + this.props.match.params._id +'/edit', handleUpdateState: this.handleUpdateState}}> Edit {this.state.title} </Link>
-          <Route exact path='/recipes/:_id/edit' component={UpdateRecipe} /> .
+            <Link to={'/recipes/' + this.props.match.params._id +'/edit'} > Edit {this.state.recipe.title} </Link>
+            <Route path={'/recipes/:_id/edit'} render={(props)=><UpdateRecipe {...props} recipe={this.state.recipe} handleUpdateState={this.handleUpdateState} />} />
        </div>
     );
   }
 }
- 
+ // if you want edit route sepate, make API call with GET request and use that as a seperate page to make updates
 export default SingleRecipe;

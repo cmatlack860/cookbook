@@ -76,7 +76,10 @@ class App extends React.Component {
       return err;
     })
   }
+// create new component recipeLIst, pass down array of recipes from App.js as props to RecipeList, then use filter on props for search functionality
+// RecipeList should contain all rendered pieces inside Route with path "/"
 
+// try to set the POST method on new page
   render() {
     const searchText = this.state.searchText;
 
@@ -89,11 +92,12 @@ class App extends React.Component {
           of what recipes you want on any given day. Update recipes, delete recipes, post new recipes, the choice is yours!
         </p>
         <br/>
-        <SearchBar handleSearch={this.handleSearch} className="" />
       </div>
       <Switch>
+        
         <Route exact path='/'>
           <div className='grid-list'>
+          <SearchBar handleSearch={this.handleSearch} className="" />
             <ul className='list-group'>
               { this.state.recipes.map((recipe)=> {
                 if (recipe.title.indexOf(searchText) !== -1) {
@@ -110,11 +114,12 @@ class App extends React.Component {
             </ul>
           </div>
           <div>
-            {/* <Link to={'/recipes/post'} component={PostRecipe} post={this.post(data)}> Click here to post a recipe to the database </Link> */}
-            <PostRecipe recipes={this.state.recipes} handleCreatePost={this.handleCreatePost} />
+            <button className="btn-secondary text-center" style={{textColor:'black', textDecoration:'none'}}><Link to={'/post'} > Click here to post a recipe to the database </Link></button>
+            {/* <PostRecipe recipes={this.state.recipes} handleCreatePost={this.handleCreatePost} /> */}
           </div>
         </Route>
-        <Route path='/recipes/:_id' component={SingleRecipe} />        
+        <Route exact path='/recipes/:_id' component={SingleRecipe} />
+        <Route exact path='/post' render={(props)=><PostRecipe {...props} recipe={this.state.recipe} handleUpdateState={this.handleUpdateState} /> } /> 
       </Switch>
     </Router>
     );
