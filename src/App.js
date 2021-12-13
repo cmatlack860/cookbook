@@ -80,16 +80,15 @@ class App extends React.Component {
       <Switch>
         <Route exact path='/'>
           <div className='grid-list'>
-              <RecipeList handleDelete={this.handleDelete} />
-               {/* recipes={this.state.recipes} searchText={this.state.searchText} this line goes above in recipeList comp*/}
+            <RecipeList handleDelete={this.handleDelete} />
+              {/* recipes={this.state.recipes} searchText={this.state.searchText} this line goes above in recipeList comp*/}
           </div>
           <div>
-            <Link to={'/recipes/post'} component={PostRecipe} post={this.post(data)}> Click here to post a recipe to the database </Link>
-            <PostRecipe handleCreatePost={this.handleCreatePost} />
-          
+            <button className='btn-seconday'><Link to={'/post'}> Click here to post a recipe to the database </Link></button>      
           </div>
         </Route>
-        <Route path='/recipes/:_id' component={SingleRecipe} />        
+        <Route path='/recipes/:_id' component={SingleRecipe} />     
+        <Route exact path='/post' render={(props)=><PostRecipe {...props} /> } />    
       </Switch>
     </Router>
     );

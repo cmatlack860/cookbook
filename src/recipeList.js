@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SearchBar from './searchBar';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 class RecipeList extends React.Component {
   constructor() {
