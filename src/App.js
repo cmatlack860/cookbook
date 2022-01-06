@@ -1,7 +1,8 @@
 import './App.css';
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import SingleRecipe from './singleRecipe';
 import PostRecipe from './postRecipe';
 import SearchBar from './searchBar';
@@ -47,7 +48,7 @@ class App extends React.Component {
         let recipes = [...this.state.recipes];
         recipes.push(data);
         this.setState({recipes});
-        console.log(this.state.recipes)
+        console.log(this.state.recipes);
       })
       .catch(err => console.log(err));
     
@@ -96,9 +97,9 @@ class App extends React.Component {
       <Switch>
         
         <Route exact path='/'>
-          <div className='grid-list'>
-          <SearchBar handleSearch={this.handleSearch} className="" />
-            <ul className='list-group'>
+          <div className='px-2'>
+          <SearchBar handleSearch={this.handleSearch} />
+            <ul id='recipeList' className=''>
               { this.state.recipes.map((recipe)=> {
                 if (recipe.title.indexOf(searchText) !== -1) {
                   return <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title} </Link>
@@ -110,16 +111,15 @@ class App extends React.Component {
                 if (recipe.title.indexOf(searchText) === -1) {
                   return 'No recipe found';
                 }})
-              };
+              }
             </ul>
-          </div>
-          <div>
-            <button className="btn-secondary text-center" style={{textColor:'black', textDecoration:'none'}}><Link to={'/post'} > Click here to post a recipe to the database </Link></button>
+            <br></br>
+            <button id='postBtn' className="btn-secondary mb-2 m-auto" style={{textColor:'black', textDecoration:'none'}}><Link to={'/post'} > Click here to post a recipe to the database </Link></button>
             {/* <PostRecipe recipes={this.state.recipes} handleCreatePost={this.handleCreatePost} /> */}
           </div>
         </Route>
         <Route exact path='/recipes/:_id' component={SingleRecipe} />
-        <Route exact path='/post' render={(props)=><PostRecipe {...props} recipe={this.state.recipe} handleUpdateState={this.handleUpdateState} /> } /> 
+        <Route exact path='/post' render={(props)=><PostRecipe {...props} recipe={this.state.recipe} handleCreatePost={this.handleCreatePost} /> } /> 
       </Switch>
     </Router>
     );

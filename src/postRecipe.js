@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import './App.css';
+import { BrowserRouter as Router, Link, useHistory } from 'react-router-dom';
+import { Navigation } from 'react-router'; 
 
 
 class PostRecipe extends React.Component {
@@ -36,14 +37,15 @@ class PostRecipe extends React.Component {
     e.target.elements.instructions.value = '';
     e.target.elements.image.value = '';
     e.target.elements.story.value = '';
+    this.props.history.push('/');
   };
 
   render() { 
     return (
     <div>
-      <Link to='/'>Back</Link>
+      <Link to={'/'} className="btn backBtn">Back</Link>
       <h1 className="text-center"> Post a new recipe to be added to your collection! </h1>
-      <form className="py-2 text-center" onSubmit={this.handlePost}>
+      <form id="postform" className="py-2 text-center" onSubmit={this.handlePost}>
         <h3>Title </h3>
         <input type="text" name="title" className="w-50" placeholder="Title"></input>
         <h3> Prep Time </h3>
@@ -57,7 +59,7 @@ class PostRecipe extends React.Component {
         <h3> Story </h3>
         <input type="text" name="story" className="w-50" placeholder="Story"></input>
           <br></br>
-        <button type="submit" className="btn btn-secondary">Submit</button>
+        <button type="submit" className="btn btn-secondary mt-3">Submit</button>
       </form>
     </div>
     );
