@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class SearchBar extends React.Component {
   render() { 
     return (
       <div>
-        <form onSubmit={this.handleSearchText}>
+        <form onSubmit={this.handleSearchText} className='text-center'>
           <input type='text' name='searchText' placeholder='Search' /><button type='submit' className='btn-primary m-2'>Search</button>
         </form>
       </div>
