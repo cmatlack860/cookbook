@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 import UpdateRecipe from './updateRecipe';
 
 class SingleRecipe extends React.Component {
@@ -38,33 +39,24 @@ class SingleRecipe extends React.Component {
       this.setState({recipe: newRecipe});
     })
   }
-  // conditionally render image tag only if there is image URL there
+
   render() { 
     return (
-      
-          <div className='p-3'>
-            <Link to={'/'} className='btn backBtn'>Back</Link>
-            <h2 className='mt-3'> {this.state.recipe.title} </h2>
-                <br/>
-                <li> Prep Time: {this.state.recipe.prep_time} </li>
-                <li> Ingredients: {this.state.recipe.ingredients} </li>
-                <li> Instructions: {this.state.recipe.instructions} </li>
-                <li> Image: <img src={this.state.recipe.image} width="300px" height="300px" alt=''/> </li>
-                <li> Story: {this.state.recipe.story} </li>
-            <br></br>
-            <Router>
-              <h3> Want to edit this recipe? </h3>
-                {/* <Route exact path='/edit' component={UpdateRecipe} />  */}
-                {/* <Link to={'/edit'} > EDIT {this.state.recipe.title} </Link> */}
-                <Link to={'/recipes/' + this.props.match.params._id +'/edit'} className='btn btn-secondary'> Edit {this.state.recipe.title} </Link>
-                {/* <Switch><Route exact path='/edit'> <h2>this is filler text</h2> </Route></Switch> */}
-                <Route exact path={'/recipes/' + this.props.match.params._id + '/edit'} render={(props)=><UpdateRecipe {...props} id={this.props.match.params._id} recipe={this.state.recipe} handleUpdateState={this.handleUpdateState} />} />
-                {/* <Route path={'/edit'} component={UpdateRecipe} /> */}
-                {/* <Link to={'/recipes/' + this.props.match.params._id +'/edit'}> Edit {this.state.recipe.title} </Link> */}
-                {/* <Route exact path='/recipes/:_id/edit' component={UpdateRecipe} />  */}
-            </Router>
-          </div>
+      <div className='p-3'>
+        <Link to={'/'}>Back</Link>
+        <h2 className='mt-3'> {this.state.recipe.title} </h2>
+            <br/>
+            <li> Prep Time: {this.state.recipe.prep_time} </li>
+            <li> Ingredients: {this.state.recipe.ingredients} </li>
+            <li> Instructions: {this.state.recipe.instructions} </li>
+            <li> Image: <img src={this.state.recipe.image} width="300px" height="300px" alt=''/> </li>
+            <li> Story: {this.state.recipe.story} </li>
+        <br></br>
         
+          <h3> Want to edit this recipe? </h3>
+            <Link to={'/recipes/' + this.props.match.params._id +'/edit'} > Edit {this.state.recipe.title} </Link>
+            <Route path={'/recipes/:_id/edit'} render={(props)=><UpdateRecipe {...props} recipe={this.state.recipe} handleUpdateState={this.handleUpdateState} />} />
+       </div>
     );
   }
 }
