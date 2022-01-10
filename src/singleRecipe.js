@@ -42,7 +42,7 @@ class SingleRecipe extends React.Component {
   render() { 
     return (
       
-          <div className='p-3'>
+          <div id='singleRecipe' className='p-3 mt-2'>
             <Link to={'/'} className='btn backBtn'>Back</Link>
             <h2 className='mt-3'> {this.state.recipe.title} </h2>
                 <br/>

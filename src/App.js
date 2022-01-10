@@ -102,12 +102,12 @@ class App extends React.Component {
             <ul id='recipeList' className=''>
               { this.state.recipes.map((recipe)=> {
                 if (recipe.title.indexOf(searchText) !== -1) {
-                  return <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title} </Link>
-                  <img src={recipe.image} width="100px" height="100px" alt="" className="m-2" /><button className='btn-danger m-3' onClick={(e) => this.handleDelete(recipe._id, e)}>Delete</button></li>
+                  return <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title}
+                  <img src={recipe.image} width="100px" height="100px" alt="imageURL" className="m-2" /></Link><button className='btn-danger m-3' onClick={(e) => this.handleDelete(recipe._id, e)}>Delete</button></li>
                 } 
                 if (recipe.title.indexOf(searchText) == '') {
-                <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title} </Link>
-                <img src={recipe.image} width="100px" height="100px" alt="" className="m-2" /><button className='btn-danger m-3' onClick={(e) => this.handleDelete(recipe._id, e)}>Delete</button></li>}
+                <li className='p-2' key={recipe._id}><Link to={'/recipes/' + recipe._id}> {recipe.title}
+                <img src={recipe.image} width="100px" height="100px" alt="imageURL" className="m-2" /></Link><button className='btn-danger m-3' onClick={(e) => this.handleDelete(recipe._id, e)}>Delete</button></li>}
                 if (recipe.title.indexOf(searchText) === -1) {
                   return 'No recipe found';
                 }})

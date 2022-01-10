@@ -33,3 +33,10 @@ a {
   background: burlywood;
   font-weight: 600;
 }
+
+#singleRecipe {
+  line-height: 1.8;
+  padding: 10px;
+  margin: 20px;
+  
+}
